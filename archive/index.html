@@ -1,0 +1,14 @@
+---
+layout: document
+title: "Historical files"
+section: archive
+order: 0
+archive_index: true
+---
+{% raw %}
+<section id="archive"><h2 id="lore-source-heading-77">Additional historical lore files</h2><p class="note">These additional Markdown files are included for completeness and provenance. They are not automatically current canon.</p></section>
+{% endraw %}
+<ul class="archive-list">
+{% assign files = site.pages | where: "section", "archive" | where_exp: "p", "p.archive_index != true" | sort: "order" %}
+{% for f in files %}<li><a href="{{ f.url | relative_url }}">{{ f.title }}</a> <span class="tag">ARCHIVE</span></li>{% endfor %}
+</ul>

@@ -1,0 +1,123 @@
+/* The Rift Convergence — Story Bible styles (ported from the original single-file bible) */
+:root{color-scheme:dark;--bg:#10131a;--panel:#1a202b;--ink:#e8e9e7;--muted:#aab4c1;--accent:#c8a977;--line:#38404c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,"Segoe UI",Arial,sans-serif}
+a{color:#e6c995}
+
+/* Header */
+.site-header{padding:48px max(24px,calc((100vw - 1100px)/2));background:linear-gradient(130deg,#252b36,#11141c);border-bottom:1px solid var(--line)}
+.site-title{margin:.3em 0 .2em;font:600 clamp(2rem,5vw,3.4rem)/1.12 'Cinzel','Palatino Linotype','Book Antiqua',Georgia,serif;letter-spacing:.065em}
+.site-title a{color:#f0dfbe;text-decoration:none}
+.site-description{color:var(--muted);max-width:800px;margin:0}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:245px minmax(0,900px);gap:36px;max-width:1240px;margin:auto;padding:32px 24px}
+.site-nav{position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto;background:var(--panel);border:1px solid var(--line);padding:18px;border-radius:12px}
+.site-nav a{display:flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;padding:7px 4px;font-size:14px}
+.site-nav a:hover{color:var(--accent)}
+.site-nav .count{margin-left:auto;font-size:12px;opacity:.7}
+.site-nav hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+main section{padding:22px 0 45px;border-bottom:1px solid var(--line)}
+footer{color:var(--muted);padding:30px;text-align:center;font-size:14px}
+@media(max-width:850px){.layout{display:block;padding:20px 16px}.site-nav{position:static;max-height:none;margin-bottom:25px}.site-header{padding:32px 16px}}
+
+/* Typography */
+h1{font:600 clamp(1.8rem,4vw,3rem)/1.15 Georgia,serif}
+h2{font:600 2rem Georgia,serif;margin:10px 0 20px}
+h3{margin-top:28px}
+main h1,main h2,main h3,main h4{color:#d99b60!important;text-shadow:none}
+main h1{color:#e9b47e!important}
+main h1,main h2,main h3,main h4,.lore-definition h3{font-family:'Cinzel','Palatino Linotype','Book Antiqua',Georgia,serif!important;font-weight:600;letter-spacing:.035em}
+main h1,main h2{letter-spacing:.045em}
+p,li{max-width:85ch}
+blockquote{margin:20px 0;padding:12px 20px;border-left:3px solid var(--accent);background:#202633}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:18px 0;display:block;overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:11px 13px;text-align:left;vertical-align:top}
+th{color:#e6c995;background:#202633}
+code{background:#252d38;padding:2px 5px;border-radius:4px}
+pre{overflow:auto;background:#202633;padding:16px;border-radius:8px}
+img{max-width:100%;height:auto}
+.tag{display:inline-block;border:1px solid #8b7654;border-radius:20px;padding:2px 10px;font-size:12px;color:#e6c995;letter-spacing:.06em;margin-right:6px}
+.note{color:var(--muted);font-size:14px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 20px;margin:12px 0}
+summary{cursor:pointer;color:var(--accent);font-weight:600}
+:target{scroll-margin-top:20px}
+main h1:target,main h2:target,main h3:target,main h4:target{outline:2px solid #d99b60;outline-offset:5px}
+.retcon-links{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 20px}
+.retcon-links a{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:7px 11px;text-decoration:none;background:var(--panel)}
+#retcon-index tr:target{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* Quick tools + utility panels */
+.quick-tools{display:grid;gap:9px;margin-bottom:20px}
+.site-nav .quick-tool{display:block;text-align:center;padding:11px 12px;border:1px solid #9c7048;border-radius:9px;background:#30251f;color:#f2d0a2;font-weight:700}
+.site-nav .quick-tool:hover,.site-nav .quick-tool:focus-visible{background:#523b2b;outline:2px solid #d6a16c;outline-offset:2px;color:#f2d0a2}
+.utility-panel{border:1px solid #6e5440;border-radius:12px;background:#191d25;margin:0 0 12px;overflow:hidden;padding:0}
+.utility-panel>summary{cursor:pointer;padding:15px 20px;color:#e6b47d;font-weight:750;font-size:1.13rem;list-style-position:inside;background:#29241f}
+.utility-panel>summary:hover{background:#392b21}
+.utility-panel>section{margin:0!important;border:0!important;border-radius:0!important;padding:20px}
+.utility-panel:target{outline:2px solid #c68c54;outline-offset:2px}
+
+/* Ask the Story Bible */
+#bible-assistant form{display:flex;gap:8px;flex-wrap:wrap}
+#bible-query{flex:1 1 320px;min-width:180px;padding:12px;border-radius:7px;border:1px solid #8b8579;background:var(--panel);color:var(--ink);font:inherit}
+#bible-assistant button{padding:10px 18px;border:1px solid #7c745f;border-radius:7px;background:#615945;color:white;cursor:pointer;font:inherit}
+#bible-results{margin-top:16px}
+#bible-results article{border-top:1px solid #9995;padding:12px 0}
+#bible-results a{font-weight:bold}
+#bible-results .answer-status{font-weight:bold;margin-bottom:8px}
+#bible-results .source-note{opacity:.8;font-size:.9em}
+.assistant-help{font-size:.9em;opacity:.8;margin:9px 0}
+
+/* Lore directory */
+.lore-directory{background:#181c24}
+.lore-directory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px}
+.lore-definition{padding:15px 17px;border:1px solid #3e4653;border-radius:9px;background:#202631;scroll-margin-top:20px}
+.lore-definition:target{outline:2px solid #e6ad70;outline-offset:3px;background:#302b29}
+.lore-definition h3{color:#e7a56d!important;margin:0 0 7px;font-size:1.15rem}
+.lore-definition .lore-summary{margin:10px 0 12px;line-height:1.55;color:#e5e5e8}
+.lore-source-link{color:#a7d9ee;text-decoration:underline;text-underline-offset:3px}
+
+/* Keyword highlighting */
+.lore-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:18px 0 26px;padding:13px 16px;background:#1a202b;border:1px solid #38404c;border-radius:10px;font-size:14px}
+.lore-toolbar button{background:#283243;color:#f3e8d3;border:1px solid #718095;border-radius:7px;padding:7px 12px;cursor:pointer;font:inherit}
+.lore-toolbar button:focus-visible{outline:2px solid #f4d29a;outline-offset:3px}
+.lore-key{display:inline-flex;gap:6px;align-items:center}
+.lore-swatch{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none;background:#e6c995}
+.lore-mark{border-radius:3px;padding:0 2px;font-weight:650;cursor:pointer;text-decoration:none!important;box-decoration-break:clone;-webkit-box-decoration-break:clone;color:#ecd9a8;background:rgba(200,169,119,.15);transition:filter .12s}
+.lore-mark:hover{filter:brightness(1.25);outline:1px solid currentColor}
+.lore-mark:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.lore-mark.lore-missing{color:#e8e9e7;background:transparent;border-bottom:1px dashed #c98a8a;border-radius:0;cursor:help;font-weight:600}
+.lore-off .lore-mark{color:inherit!important;background:transparent!important;font-weight:inherit!important;padding:0!important;text-decoration:underline dotted!important;text-decoration-color:#7d8794!important;text-underline-offset:3px;border-bottom:0}
+.cat-chip{display:inline-block;border-radius:20px;padding:1px 10px;font-size:12px;font-weight:650;letter-spacing:.04em;color:#ecd9a8;background:rgba(200,169,119,.15)}
+
+/* Entries */
+.breadcrumb{font-size:14px;color:var(--muted);margin:0 0 6px}
+.breadcrumb a{color:var(--muted)}
+.entry-title{margin:.2em 0 .3em}
+.entry-meta{margin:0 0 10px}
+.entry-aliases .alias{font-style:italic}
+.entry-summary,.entry-body>p:first-child{font-size:1.13rem}
+.entry-body{margin:18px 0 10px}
+.entry-panel{border-top:1px solid var(--line);margin-top:26px;padding-top:6px}
+.entry-panel h2{font-size:1.25rem;margin:14px 0 10px}
+.keyword-chips{display:flex;flex-wrap:wrap;gap:8px}
+.keyword-chips .lore-mark{padding:3px 10px;border-radius:20px;font-size:14px}
+.declared-keywords{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.edit-links{margin-top:30px}
+.entry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:20px 0}
+.entry-card{display:flex;flex-direction:column;gap:6px;padding:15px 17px;border:1px solid #3e4653;border-left:4px solid var(--cat,#c8a977);border-radius:9px;background:#202631;text-decoration:none;color:var(--ink)}
+.entry-card:hover{background:#29303c}
+.entry-card strong{color:#e7a56d;font-family:'Cinzel','Palatino Linotype',Georgia,serif;letter-spacing:.03em}
+.entry-card span{font-size:14px;color:var(--muted)}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:18px 0 30px}
+.home-card{padding:18px;border:1px solid #3e4653;border-radius:10px;background:#1a202b;text-decoration:none;color:var(--ink)}
+.home-card:hover{background:#232a36}
+.home-card h3{margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.home-card p{margin:0;color:var(--muted);font-size:14px}
+.letter-group h2{font-size:1.4rem;border-bottom:1px solid var(--line);padding-bottom:4px}
+.archive-list li{margin:6px 0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:36px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.pager a{text-decoration:none}
+.pager-next{margin-left:auto}
+
+@media print{body{background:white;color:black}.site-nav,.lore-toolbar,.utility-panel{display:none}.layout{display:block}details{break-inside:avoid}details:not([open])>*:not(summary){display:block}h1,h2,h3{color:#333}}

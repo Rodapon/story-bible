@@ -1,0 +1,67 @@
+---
+layout: default
+title: Dictionary
+---
+{%- include entries.html -%}
+{%- comment -%} Build a §-delimited list of every known name (titles + aliases), lowercase. {%- endcomment -%}
+{%- assign known_names = "§" -%}
+{%- for e in entries -%}{%- include entry-vars.html -%}
+  {%- assign known_names = known_names | append: e_title | downcase | append: "§" -%}
+  {%- for a in e.aliases -%}{%- assign known_names = known_names | append: a | downcase | append: "§" -%}{%- endfor -%}
+{%- endfor -%}
+<article class="page-content dictionary-page">
+  <p class="breadcrumb"><a href="{{ '/' | relative_url }}">Home</a></p>
+  <h1>Dictionary</h1>
+  <p>Every entry file in the repository, detected automatically. Each title and alias is highlighted wherever it appears on the site. {{ entries.size }} entries.</p>
+
+  <h2>A–Z</h2>
+  {%- assign current_letter = "" %}
+  {%- for e in entries %}{% include entry-vars.html %}
+    {%- assign letter = e_title | slice: 0 | upcase %}
+    {%- if letter != current_letter %}
+      {%- unless current_letter == "" %}</div></section>{% endunless %}
+      {%- assign current_letter = letter %}
+  <section class="letter-group" id="letter-{{ letter | downcase }}"><h3>{{ letter }}</h3><div class="entry-grid">
+    {%- endif %}
+    <a class="entry-card" href="{{ e.url | relative_url }}" data-category="{{ e_cat }}"><strong>{{ e_title }}</strong><span><span class="cat-chip" data-category="{{ e_cat }}">{{ e_label }}</span> {{ e.summary }}</span></a>
+  {%- endfor %}
+  {%- unless current_letter == "" %}</div></section>{% endunless %}
+
+  <h2>By category</h2>
+  {%- for cat in all_categories %}
+    {%- assign c = site.data.categories | where: "id", cat | first %}
+  <section id="category-{{ cat }}">
+    <h3><i class="lore-swatch" data-category="{{ cat }}" aria-hidden="true"></i> {% if c %}{{ c.label }}{% else %}{{ cat | replace: "-", " " | capitalize }}{% endif %} <span class="note">(<code>{{ cat }}/</code>)</span></h3>
+    <ul>
+    {%- for e in entries %}{% include entry-vars.html %}{% if e_cat == cat %}
+      <li><a href="{{ e.url | relative_url }}">{{ e_title }}</a>{% if e.aliases %} <span class="note">— also {{ e.aliases | join: ", " }}</span>{% endif %}</li>
+    {%- endif %}{% endfor %}
+    </ul>
+  </section>
+  {%- endfor %}
+
+  <h2 id="wanted">Wanted entries</h2>
+  <p>Keywords marked with <code>[[double brackets]]</code> somewhere on the site that do not have an entry file yet.</p>
+  {%- assign wanted = "" -%}
+  {%- for p in site.pages -%}
+    {%- if p.url == page.url or p.url == "/" -%}{%- continue -%}{%- endif -%}
+    {%- unless p.content contains "[[" -%}{%- continue -%}{%- endunless -%}
+    {%- assign parts = p.content | split: "[[" -%}
+    {%- for part in parts offset: 1 -%}
+      {%- unless part contains "]]" -%}{%- continue -%}{%- endunless -%}
+      {%- assign term = part | split: "]]" | first | split: "|" | first | strip -%}
+      {%- assign key = "§" | append: term | downcase | append: "§" -%}
+      {%- assign key2 = key | replace: "§the ", "§" -%}
+      {%- if term == "" or term contains "{" or term contains "<" -%}{%- continue -%}{%- endif -%}
+      {%- unless known_names contains key or known_names contains key2 -%}
+        {%- assign wanted = wanted | append: term | append: "§" -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign wanted_list = wanted | split: "§" | uniq | sort -%}
+  {%- if wanted_list.size > 0 %}
+  <ul>{% for w in wanted_list %}<li>{{ w }}</li>{% endfor %}</ul>
+  {%- else %}
+  <p class="note">None — every marked keyword has an entry.</p>
+  {%- endif %}
+</article>

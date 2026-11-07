@@ -1,0 +1,16 @@
+{%- comment -%}
+  Collects every dictionary entry into `entries`.
+  An entry is ANY Markdown file inside a top-level folder (characters/, worlds/, a new folder
+  you create...), except index.md / README.md and files with `entry: false`.
+  Its category is its folder name unless the file sets `category:`.
+  Also sets `all_categories` (known categories first, then any newly discovered folders).
+{%- endcomment -%}
+{%- assign entries = site.pages | where_exp: "p", "p.path contains '/'" | where_exp: "p", "p.name contains '.md'" | where_exp: "p", "p.name != 'index.md'" | where_exp: "p", "p.name != 'README.md'" | where_exp: "p", "p.entry != false" | sort: "title" -%}
+{%- assign known_categories = site.data.categories | map: "id" | join: "§" -%}
+{%- assign found_categories = "" -%}
+{%- for e in entries -%}
+  {%- assign e_cat = e.path | split: "/" | first -%}
+  {%- if e.category -%}{%- assign e_cat = e.category -%}{%- endif -%}
+  {%- assign found_categories = found_categories | append: "§" | append: e_cat -%}
+{%- endfor -%}
+{%- assign all_categories = known_categories | append: found_categories | split: "§" | uniq | compact -%}

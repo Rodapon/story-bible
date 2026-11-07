@@ -1,0 +1,49 @@
+---
+layout: default
+title: Home
+---
+{%- include entries.html -%}
+{%- assign repo = site.github.repository_nwo -%}
+{%- assign branch = site.github.source.branch | default: "main" -%}
+<article class="page-content home">
+  <h1>Story Bible</h1>
+  <p>{{ site.description }}</p>
+  <p>Every highlighted word is a dictionary keyword. Select one to see its definition, then close the panel to return to where you were reading.</p>
+
+  <h2>Browse the dictionary</h2>
+  <div class="home-grid">
+  {%- for cat in all_categories %}
+    {%- assign c = site.data.categories | where: "id", cat | first %}
+    {%- assign cat_count = 0 %}
+    {%- for e in entries %}{% include entry-vars.html %}{% if e_cat == cat %}{% assign cat_count = cat_count | plus: 1 %}{% endif %}{% endfor %}
+    {%- assign index_path = cat | append: "/index.md" %}
+    {%- assign index_page = site.pages | where: "path", index_path | first %}
+    {%- if index_page %}{% assign cat_href = index_page.url | relative_url %}{% else %}{% assign cat_href = '/dictionary/' | relative_url | append: '#category-' | append: cat %}{% endif %}
+    <a class="home-card" href="{{ cat_href }}">
+      <h3><i class="lore-swatch" data-category="{{ cat }}" aria-hidden="true"></i>{% if c %}{{ c.label }}{% else %}{{ cat | replace: "-", " " | capitalize }}{% endif %}</h3>
+      <p>{{ cat_count }} {% if cat_count == 1 %}entry{% else %}entries{% endif %}{% if c.description %} · {{ c.description }}{% endif %}</p>
+    </a>
+  {%- endfor %}
+  </div>
+  <p><a href="{{ '/dictionary/' | relative_url }}">See every entry A–Z →</a></p>
+
+  <h2>Canon &amp; sources</h2>
+  <div class="home-grid">
+    <a class="home-card" href="{{ '/canon/' | relative_url }}"><h3>Current canon</h3><p>Latest established decisions, terminology, and canon additions [EX][SLA].</p></a>
+    <a class="home-card" href="{{ '/canon/retcons/' | relative_url }}"><h3>Retcon log</h3><p>Change register by concept and editor.</p></a>
+    <a class="home-card" href="{{ '/canon/authorship/' | relative_url }}"><h3>Authorship registry</h3><p>Original creators and subsequent development.</p></a>
+    <a class="home-card" href="{{ '/canon/audit/' | relative_url }}"><h3>Continuity audit</h3><p>Plot holes and open continuity questions.</p></a>
+    <a class="home-card" href="{{ '/sources/core/' | relative_url }}"><h3>Original Core Source [CS]</h3><p>The original story, unaltered.</p></a>
+    <a class="home-card" href="{{ '/sources/expansion/' | relative_url }}"><h3>Expansion document [EX]</h3><p>Sanctum &amp; Sovereignty, historical version 2.3.</p></a>
+    <a class="home-card" href="{{ '/archive/' | relative_url }}"><h3>Historical files</h3><p>Earlier drafts kept for provenance. Not automatically current canon.</p></a>
+  </div>
+
+  <h2>Adding lore</h2>
+  <ol>
+    <li>Pick the folder that fits: <code>characters/</code>, <code>worlds/</code>, <code>locations/</code>, <code>factions/</code>, <code>artifacts/</code>, <code>concepts/</code>, or create a new folder.</li>
+    <li>Upload a Markdown file named after the entry, such as <code>characters/oathbreaker.md</code>. The first <code># Heading</code> (or the <code>title:</code> field) becomes the dictionary term.</li>
+    <li>Wrap important nouns in double brackets, like <code>[[Wyrm]]</code> or <code>[[Soul|souls]]</code>, to mark them as keywords.</li>
+    <li>Commit. GitHub Pages rebuilds in about a minute and the new term is highlighted across the whole site.</li>
+  </ol>
+  {%- if repo %}<p class="note"><a href="https://github.com/{{ repo }}/blob/{{ branch }}/CONTRIBUTING.md">Full upload guide</a></p>{% endif %}
+</article>

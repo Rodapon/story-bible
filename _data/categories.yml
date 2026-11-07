@@ -1,0 +1,50 @@
+# Display settings for dictionary categories (one per top-level folder).
+# A folder that is not listed here still works: it is detected automatically and shown with
+# the default gold colour. Add it here only to give it a nicer label, colour, or position.
+#
+#   id:          folder name (must match exactly)
+#   label:       plural heading shown in menus and the legend
+#   singular:    shown on each entry ("Character", "Location"...)
+#   color / bg:  keyword highlight text colour and background tint
+
+- id: characters
+  label: Characters & entities
+  singular: Character
+  color: "#f3c58b"
+  bg: "rgba(204,132,44,.16)"
+  description: People, beings, and ancient entities.
+
+- id: worlds
+  label: Worlds & civilizations
+  singular: World
+  color: "#f2a3a3"
+  bg: "rgba(200,80,80,.15)"
+  description: Worlds, kingdoms, and the civilizations that shaped them.
+
+- id: locations
+  label: Locations & domains
+  singular: Location
+  color: "#8fe0d8"
+  bg: "rgba(50,170,160,.15)"
+  description: Places, realms, and domains.
+
+- id: factions
+  label: Factions & peoples
+  singular: Faction
+  color: "#9ed6ee"
+  bg: "rgba(67,158,206,.15)"
+  description: Orders, peoples, and political bodies.
+
+- id: artifacts
+  label: Artifacts & pacts
+  singular: Artifact
+  color: "#a7e2c2"
+  bg: "rgba(60,171,114,.15)"
+  description: Objects, weapons, and binding pacts.
+
+- id: concepts
+  label: Soul mechanics & concepts
+  singular: Concept
+  color: "#d4b6ff"
+  bg: "rgba(150,104,212,.16)"
+  description: Cosmic principles, soul mechanics, and terminology.

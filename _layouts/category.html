@@ -1,0 +1,27 @@
+---
+layout: default
+---
+{%- include entries.html -%}
+{%- assign cat = page.category_id | default: page.path | split: "/" | first -%}
+{%- assign c = site.data.categories | where: "id", cat | first -%}
+{%- assign repo = site.github.repository_nwo -%}
+{%- assign branch = site.github.source.branch | default: "main" -%}
+<article class="page-content category-page" data-category="{{ cat }}">
+  <p class="breadcrumb"><a href="{{ '/' | relative_url }}">Home</a> › <a href="{{ '/dictionary/' | relative_url }}">Dictionary</a></p>
+  <h1>{% if c %}{{ c.label }}{% else %}{{ page.title | default: cat }}{% endif %}</h1>
+  {%- if c.description %}<p class="note">{{ c.description }}</p>{% endif %}
+  {{ content }}
+  <div class="entry-grid">
+  {%- assign shown = 0 -%}
+  {%- for e in entries %}{% include entry-vars.html %}{% if e_cat == cat %}{% assign shown = shown | plus: 1 %}
+    <a class="entry-card" href="{{ e.url | relative_url }}" data-category="{{ e_cat }}">
+      <strong>{{ e_title }}</strong>
+      <span>{{ e.summary | default: "No summary yet." }}</span>
+    </a>
+  {%- endif %}{% endfor %}
+  </div>
+  {%- if shown == 0 %}<p class="note">No entries yet.</p>{% endif %}
+  {%- if repo %}
+  <p class="edit-links note"><a href="https://github.com/{{ repo }}/upload/{{ branch }}/{{ cat }}">Upload files to <code>{{ cat }}/</code></a> · <a href="https://github.com/{{ repo }}/new/{{ branch }}/{{ cat }}?filename=new-entry.md">Write a new entry in the browser</a></p>
+  {%- endif %}
+</article>

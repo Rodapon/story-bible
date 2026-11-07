@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if page.title and page.url != "/" %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+<meta name="description" content="{{ page.summary | default: site.description | strip_html | strip_newlines | escape }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+{%- include entries.html %}
+<style id="category-colors">
+{%- for c in site.data.categories %}
+.lore-mark[data-category="{{ c.id }}"],.cat-chip[data-category="{{ c.id }}"]{color:{{ c.color }};background:{{ c.bg }}}
+.lore-swatch[data-category="{{ c.id }}"]{background:{{ c.color }}}
+.entry-card[data-category="{{ c.id }}"]{--cat:{{ c.color }}}
+{%- endfor %}
+</style>
+</head>
+<body data-baseurl="{{ site.baseurl }}" data-page-url="{{ page.url | relative_url }}" data-section="{{ page.section | default: page.layout }}">
+<header class="site-header">
+  <div class="tag">STORY BIBLE</div><div class="tag">CURRENT CANON + SOURCE ARCHIVE</div>
+  <p class="site-title"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></p>
+  <p class="site-description">{{ site.description }}</p>
+</header>
+<div class="layout">
+<nav class="site-nav" aria-label="Site">
+  <div class="quick-tools">
+    <a class="quick-tool" data-open-panel="assistant-panel" href="#assistant-panel">Ask the Story Bible</a>
+    <a class="quick-tool" data-open-panel="directory-panel" href="#directory-panel">Lore Reference Directory</a>
+  </div>
+  <strong>Contents</strong>
+  <a href="{{ '/' | relative_url }}">Home</a>
+  <a href="{{ '/dictionary/' | relative_url }}">Dictionary (all entries)</a>
+  <a href="{{ '/canon/authorship/' | relative_url }}">Authorship registry</a>
+  <a href="{{ '/canon/' | relative_url }}">Current canon [EX][SLA]</a>
+  <a href="{{ '/canon/#november-canon-additions' | relative_url }}">Latest canon additions</a>
+  <a href="{{ '/canon/retcons/' | relative_url }}">Retcon contents &amp; editor change log</a>
+  <a href="{{ '/canon/audit/' | relative_url }}">Continuity audit</a>
+  <a href="{{ '/sources/core/' | relative_url }}">Original Core Source [CS]</a>
+  <a href="{{ '/sources/expansion/' | relative_url }}">Expansion document [EX] (unassigned)</a>
+  <a href="{{ '/archive/' | relative_url }}">Historical files</a>
+  <hr>
+  <strong>Browse</strong>
+  {%- for cat in all_categories %}
+    {%- assign c = site.data.categories | where: "id", cat | first %}
+    {%- assign cat_count = 0 %}
+    {%- for e in entries %}{% include entry-vars.html %}{% if e_cat == cat %}{% assign cat_count = cat_count | plus: 1 %}{% endif %}{% endfor %}
+    {%- assign index_path = cat | append: "/index.md" %}
+    {%- assign index_page = site.pages | where: "path", index_path | first %}
+    {%- if index_page %}{% assign cat_href = index_page.url | relative_url %}{% else %}{% assign cat_href = '/dictionary/' | relative_url | append: '#category-' | append: cat %}{% endif %}
+    <a href="{{ cat_href }}"><i class="lore-swatch" data-category="{{ cat }}" aria-hidden="true"></i> {% if c %}{{ c.label }}{% else %}{{ cat | replace: "-", " " | capitalize }}{% endif %} <span class="count">{{ cat_count }}</span></a>
+  {%- endfor %}
+  <hr>
+  <p class="note"><b>[CS]</b> Core Source<br><b>[EX][SLA]</b> Your expansion<br><b>[EX][PDN]</b> Other editor’s expansion<br><b>[EX][SPA]</b> Original creator of the Ancient Kingdom and the Wyrm<br><b>[EX]</b> Expansion with unverified editor<br><b>[SD]</b> Shared Development (available if confirmed)</p>
+</nav>
+<main id="main">
+  <details class="utility-panel" id="assistant-panel">
+    <summary>Ask the Story Bible</summary>
+    <section id="bible-assistant">
+      <h2>Ask the Story Bible</h2>
+      <p>Search established lore, retcons, and historical material across every page. Answers are excerpts from the Bible, not generated claims.</p>
+      <form id="bible-search-form" role="search"><input aria-label="Ask the Story Bible" id="bible-query" placeholder="Ask: Why did the Stewards destroy the Ancient Kingdom?" required type="search"><button type="submit">Find answer</button></form>
+      <p class="assistant-help">Results link to the original passage. Historical drafts and proposed lore are identified when possible. If no relevant passage is found, the question is marked unanswered.</p>
+      <div aria-live="polite" id="bible-results"></div>
+    </section>
+  </details>
+  <details class="utility-panel" id="directory-panel">
+    <summary>Lore Reference Directory</summary>
+    <section class="lore-directory" id="lore-directory">
+      <h2>Lore reference directory</h2>
+      <p>Select any highlighted term to open its short definition here. Use “Open entry” for the full page or “Read source” to jump to the story section. Close this panel to return to where you were reading.</p>
+      <div class="lore-directory-grid">
+      {%- for e in entries %}{% include entry-vars.html %}{% assign src = e.sources | first %}
+        <article class="lore-definition" data-category="{{ e_cat }}" id="lore-definition-{{ e_slug }}">
+          <h3>{{ e_title }}</h3>
+          <span class="cat-chip" data-category="{{ e_cat }}">{{ e_label }}</span>
+          <p class="lore-summary">{{ e.summary | default: "No summary yet." }}</p>
+          <a class="lore-source-link" href="{{ e.url | relative_url }}">Open entry</a>{% if src.url %} · <a class="lore-source-link" href="{{ src.url | relative_url }}">Read source section</a>{% endif %}
+        </article>
+      {%- endfor %}
+      </div>
+    </section>
+  </details>
+  <div class="lore-toolbar" aria-label="Lore keyword highlighting controls">
+    <strong>Lore keyword highlighting</strong>
+    <button type="button" id="lore-toggle" aria-pressed="true">Turn highlighting off</button>
+    {%- for cat in all_categories %}{% assign c = site.data.categories | where: "id", cat | first %}
+    <span class="lore-key"><i class="lore-swatch" data-category="{{ cat }}" aria-hidden="true"></i>{% if c %}{{ c.label }}{% else %}{{ cat | replace: "-", " " | capitalize }}{% endif %}</span>
+    {%- endfor %}
+  </div>
+  {{ content }}
+</main>
+</div>
+<footer>Attribution identifies source provenance and editor contribution, not ownership. [EX][SLA] = your edits; [EX][PDN] = other editor’s edits. Historical material without verified attribution remains unassigned. <a href="{{ '/legacy/original-story-bible.html' | relative_url }}">Original single-file Story Bible</a>.</footer>
+<script type="application/json" id="lore-dictionary">{% include dictionary-json.html %}</script>
+<script type="application/json" id="lore-pages">[
+{%- assign docs = site.pages | where: "layout", "document" | sort: "url" -%}
+{%- for d in docs %}{% unless forloop.first %},{% endunless %}{"url":{{ d.url | relative_url | jsonify }},"title":{{ d.title | jsonify }},"section":{{ d.section | jsonify }}}{% endfor -%}
+{%- for e in entries %}{% include entry-vars.html %},{"url":{{ e.url | relative_url | jsonify }},"title":{{ e_title | jsonify }},"section":"entry"}{% endfor -%}
+]</script>
+<script src="{{ '/assets/js/lore.js' | relative_url }}"></script>
+</body>
+</html>

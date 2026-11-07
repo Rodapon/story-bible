@@ -1,0 +1,70 @@
+---
+layout: default
+---
+{%- assign e = page -%}
+{%- include entry-vars.html -%}
+{%- assign index_path = e_cat | append: "/index.md" -%}
+{%- assign index_page = site.pages | where: "path", index_path | first -%}
+{%- if index_page %}{% assign cat_href = index_page.url | relative_url %}{% else %}{% assign cat_href = '/dictionary/' | relative_url | append: '#category-' | append: e_cat %}{% endif -%}
+{%- assign repo = site.github.repository_nwo -%}
+{%- assign branch = site.github.source.branch | default: "main" -%}
+{%- assign body_text = content | strip_html | strip -%}
+<article class="page-content entry" data-category="{{ e_cat }}" data-entry="{{ e_slug }}">
+  <p class="breadcrumb"><a href="{{ '/' | relative_url }}">Home</a> › <a href="{{ cat_href }}">{% if e_cat_data %}{{ e_cat_data.label }}{% else %}{{ e_cat | replace: "-", " " | capitalize }}{% endif %}</a></p>
+  <h1 class="entry-title">{{ e_title }}</h1>
+  <p class="entry-meta">
+    <span class="cat-chip" data-category="{{ e_cat }}">{{ e_label }}</span>
+    {%- if page.status %} <span class="tag">{{ page.status | upcase }}</span>{% endif %}
+  </p>
+  {%- if page.aliases %}
+  <p class="entry-aliases note">Also detected as: {% for a in page.aliases %}<span class="alias">{{ a }}</span>{% unless forloop.last %}, {% endunless %}{% endfor %}</p>
+  {%- endif %}
+
+  {%- if page.attribution %}
+  <table class="entry-attribution"><thead><tr><th>Origin</th><th>Subsequent development</th></tr></thead>
+    <tbody><tr><td><strong>{{ page.attribution.origin }}</strong></td><td>{{ page.attribution.development }}</td></tr></tbody></table>
+  {%- endif %}
+
+  {%- if body_text == "" and page.summary %}
+  <p class="entry-summary">{{ page.summary }}</p>
+  {%- endif %}
+
+  <div class="entry-body">
+  {{ content }}
+  </div>
+
+  <aside class="entry-panel" aria-labelledby="kw-heading">
+    <h2 id="kw-heading">Keywords in this entry</h2>
+    {%- if page.keywords %}
+    <p class="declared-keywords">{% for k in page.keywords %}[[{{ k }}]] {% endfor %}</p>
+    {%- endif %}
+    <div id="entry-keywords" class="keyword-chips"><p class="note">Detected automatically from the text above.</p></div>
+  </aside>
+
+  {%- if page.sources %}
+  <aside class="entry-panel">
+    <h2>Sources</h2>
+    <ul class="entry-sources">{% for s in page.sources %}<li><a href="{{ s.url | relative_url }}">{{ s.label | default: s.url }}</a></li>{% endfor %}</ul>
+  </aside>
+  {%- endif %}
+
+  <aside class="entry-panel">
+    <h2>Mentioned in</h2>
+    {%- capture mentions -%}
+      {%- assign pool = site.pages | sort: "url" -%}
+      {%- for p in pool -%}
+        {%- if p.url == page.url or p.archive_index or p.url == "/" or p.name == "index.md" -%}{%- continue -%}{%- endif -%}
+        {%- unless p.layout == "document" or p.name contains ".md" -%}{%- continue -%}{%- endunless -%}
+        {%- assign hit = false -%}
+        {%- if p.content contains e_title -%}{%- assign hit = true -%}{%- endif -%}
+        {%- for a in page.aliases -%}{%- if p.content contains a -%}{%- assign hit = true -%}{%- endif -%}{%- endfor -%}
+        {%- if hit -%}<li><a href="{{ p.url | relative_url }}">{{ p.title | default: p.name }}</a>{% if p.section %} <span class="note">({{ p.section }})</span>{% endif %}</li>{%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if mentions != "" %}<ul class="mentions">{{ mentions }}</ul>{% else %}<p class="note">No other page mentions this entry yet.</p>{% endif %}
+  </aside>
+
+  {%- if repo %}
+  <p class="edit-links note"><a href="https://github.com/{{ repo }}/edit/{{ branch }}/{{ page.path }}">Edit this entry on GitHub</a> · <a href="https://github.com/{{ repo }}/upload/{{ branch }}/{{ e_cat }}">Upload new {{ e_label | downcase }} files</a></p>
+  {%- endif %}
+</article>

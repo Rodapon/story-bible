@@ -1,0 +1,6 @@
+{%- include entries.html -%}
+[{%- for e in entries -%}
+{%- include entry-vars.html -%}
+{%- assign src = e.sources | first -%}
+{"title":{{ e_title | jsonify }},"slug":{{ e_slug | jsonify }},"category":{{ e_cat | jsonify }},"label":{{ e_label | jsonify }},"aliases":{% if e.aliases %}{{ e.aliases | jsonify }}{% else %}[]{% endif %},"summary":{{ e.summary | default: "" | strip_html | jsonify }},"url":{{ e.url | relative_url | jsonify }}{% if src.url %},"source":{{ src.url | relative_url | jsonify }}{% endif %}}{% unless forloop.last %},{% endunless %}
+{%- endfor -%}]

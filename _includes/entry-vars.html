@@ -1,0 +1,17 @@
+{%- comment -%}
+  Given `e` (an entry page), sets: e_title, e_slug, e_cat, e_cat_data, e_label.
+{%- endcomment -%}
+{%- assign e_slug = e.name | split: "." | first -%}
+{%- if e.title -%}
+  {%- assign e_title = e.title -%}
+{%- else -%}
+  {%- assign e_title = e_slug | replace: "-", " " | replace: "_", " " | capitalize -%}
+{%- endif -%}
+{%- assign e_cat = e.path | split: "/" | first -%}
+{%- if e.category -%}{%- assign e_cat = e.category -%}{%- endif -%}
+{%- assign e_cat_data = site.data.categories | where: "id", e_cat | first -%}
+{%- if e_cat_data -%}
+  {%- assign e_label = e_cat_data.singular -%}
+{%- else -%}
+  {%- assign e_label = e_cat | replace: "-", " " | capitalize -%}
+{%- endif -%}

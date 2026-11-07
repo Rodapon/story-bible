@@ -1,0 +1,22 @@
+---
+layout: default
+---
+{%- assign siblings = site.pages | where: "section", page.section | where_exp: "p", "p.archive_index != true" | sort: "order" -%}
+<article class="page-content document" data-section="{{ page.section }}">
+  {%- if page.section == "archive" and page.archive_index != true %}
+  <p class="breadcrumb"><a href="{{ '/archive/' | relative_url }}">Historical files</a> › <span class="archive-filename">{{ page.title }}</span> <span class="tag">ARCHIVE</span></p>
+  {%- elsif page.section == "canon" and page.url != "/canon/" %}
+  <p class="breadcrumb"><a href="{{ '/canon/' | relative_url }}">Current canon</a> › {{ page.title }}</p>
+  {%- elsif page.section == "sources" %}
+  <p class="breadcrumb">Sources › {{ page.title }}</p>
+  {%- endif %}
+  {{ content }}
+  {%- if page.archive_index != true and siblings.size > 1 %}
+  <nav class="pager" aria-label="More in this section">
+    {%- for s in siblings %}{% if s.url == page.url %}
+      {%- unless forloop.first %}{% assign prev_i = forloop.index0 | minus: 1 %}{% assign prev = siblings[prev_i] %}<a class="pager-prev" href="{{ prev.url | relative_url }}">← {{ prev.title }}</a>{% endunless %}
+      {%- unless forloop.last %}{% assign next = siblings[forloop.index] %}<a class="pager-next" href="{{ next.url | relative_url }}">{{ next.title }} →</a>{% endunless %}
+    {%- endif %}{% endfor %}
+  </nav>
+  {%- endif %}
+</article>

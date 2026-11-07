@@ -1,0 +1,59 @@
+# The Rift Convergence — Story Bible (GitHub Pages / Jekyll)
+# GitHub Pages builds this automatically. No local tooling is required.
+
+title: The Rift Convergence
+tagline: Complete Story Bible
+description: >-
+  A consolidated, searchable reference for the Core Source, Expansion, current canon,
+  and unresolved continuity questions. Newer approved decisions take precedence over
+  historical drafts.
+
+# /characters/oathbreaker.md  ->  /characters/oathbreaker/
+permalink: pretty
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# All of these are on the GitHub Pages allow-list (most are enabled there by default).
+plugins:
+  - jekyll-optional-front-matter   # a plain .md upload with no front matter still becomes a page
+  - jekyll-titles-from-headings    # "# Oathbreaker" on the first line becomes the page title
+  - jekyll-default-layout          # pages with no layout use _layouts/page.html (the entry layout)
+  - jekyll-relative-links
+  - jekyll-github-metadata         # powers the "Edit on GitHub" / "Add an entry" links
+
+titles_from_headings:
+  enabled: true
+  strip_title: true
+  collections: false
+
+optional_front_matter:
+  remove_originals: true
+
+# Every folder below becomes a dictionary category automatically, even ones not listed in
+# _data/categories.yml. These defaults just make sure entries render with the entry layout.
+defaults:
+  - scope: { path: "characters" }
+    values: { layout: entry }
+  - scope: { path: "worlds" }
+    values: { layout: entry }
+  - scope: { path: "locations" }
+    values: { layout: entry }
+  - scope: { path: "factions" }
+    values: { layout: entry }
+  - scope: { path: "artifacts" }
+    values: { layout: entry }
+  - scope: { path: "concepts" }
+    values: { layout: entry }
+
+exclude:
+  - README.md
+  - EDITORIAL_RULES.md
+  - CONTRIBUTING.md
+  - tools/
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .jekyll-cache/
