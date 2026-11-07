@@ -1,12 +1,12 @@
 ---
 title: "Codex"
-summary: "The Wyrm’s single physical manifestation, a sword connecting Oathbreaker to his royal ancestors."
+summary: "The Wyrm’s single physical manifestation: a sword that serves as Oathbreaker’s conduit to the Ancestral Domain, letting him invoke ancestors of his bloodline."
 sources:
   - label: "Current canon › Oathbreaker origin"
     url: /canon/#lore-source-heading-19
 ---
 
-The [[Wyrm]]’s single physical manifestation, a sword connecting [[Oathbreaker]] to his royal ancestors.
+The [[Wyrm]]’s single physical manifestation: a sword that serves as [[Oathbreaker]]’s conduit to the Ancestral Domain, letting him invoke ancestors of his bloodline.
 
 ## From the current canon
 
