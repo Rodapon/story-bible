@@ -1,5 +1,5 @@
 ---
-title: "Soulbound Sword"
+title: "The Codex"
 summary: "An earlier name for the Codex, Oathbreaker’s signature sword."
 sources:
   - label: "Current canon › Oathbreaker origin"
